@@ -31,10 +31,13 @@ app.use(session({
 }))
 
 // flash 中间件，用来显示通知
-app.use(flash())
+app.use(flash());
 
+app.use(require('express-formidable')({
+  uploadDir: path.join(__dirname, 'public/img'), // 上传文件目录
+  keepExtensions: true //保留后缀
+}))
 
-routes(app);
 
 // 设置模板全局常量
 app.locals.blog = {
@@ -49,6 +52,10 @@ app.use(function(req, res, next) {
   res.locals.error = req.flash('error').toString();
   next();
 })
+
+routes(app);
+
+
 
 // 监听端口，启动程序
 app.listen(config.port, function() {
